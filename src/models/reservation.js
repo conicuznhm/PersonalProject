@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const status = ['pending', 'timesUp', 'cancel', 'completed']
+    const status = ['reserve', 'timesUp', 'cancel', 'activated']
     const Reservation = sequelize.define('Reservation', {
         slotName: {
             type: DataTypes.STRING,
