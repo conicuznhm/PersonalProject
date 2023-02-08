@@ -40,7 +40,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: true
-        }
+        },
+        parkImage: DataTypes.STRING
 
     }, { underscored: true })
 

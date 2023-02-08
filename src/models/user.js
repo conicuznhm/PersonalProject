@@ -38,7 +38,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.ENUM(...role),
             allowNull: false,
             defaultValue: role[0]
-        }
+        },
+        profileImage: DataTypes.STRING
     }, {
         underscored: true
     })

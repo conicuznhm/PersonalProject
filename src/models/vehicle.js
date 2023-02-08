@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 notEmpty: true
             }
-        }
+        },
+        vehicleImage: DataTypes.STRING
     }, { underscored: true })
 
     Vehicle.associate = db => {

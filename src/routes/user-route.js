@@ -9,7 +9,7 @@ router.get('/:userId', userController.getUserInfoById)
 router.patch('/', userController.updateProfile)
 
 // upload.single('profileImage')
-router.patch('/', upload.fields([
+router.patch('/image', upload.fields([
     { name: 'profileImage', maxCount: 1 }
 ]),
     userController.updateProfileImage
