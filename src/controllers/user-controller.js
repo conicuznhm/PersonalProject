@@ -26,7 +26,7 @@ exports.getUserInfoById = async (req, res, next) => {
 
 exports.updateProfile = async (req, res, next) => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         const value = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
@@ -41,8 +41,9 @@ exports.updateProfile = async (req, res, next) => {
 
 exports.updateProfileImage = async (req, res, next) => {
     try {
-        let value;
+        // let value
         const { profileImage } = req.user;
+        // console.log(req.user)
         const profilePublicId = profileImage ?
             cloudinary.getPublicId(profileImage) :
             null;
@@ -53,11 +54,12 @@ exports.updateProfileImage = async (req, res, next) => {
             const profileImage = await cloudinary.upload(
                 req.files.profileImage[0].path, profilePublicId
             )
-            value = { profileImage }
+            // value = { profileImage }
+            await User.update({ profileImage }, { where: { id: req.user.id } })
+            res.status(200).json({ profileImage })
         }
 
-        await User.update(value, { where: { id: req.user.id } })
-        res.status(200).json(value)
+
     } catch (err) { next(err) }
     finally {
         if (req.files.profileImage) {

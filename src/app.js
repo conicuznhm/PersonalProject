@@ -7,7 +7,7 @@ const errorMW = require("./middlewares/error");
 const authRoute = require('./routes/auth-route');
 const authenticateMiddleware = require('./middlewares/authenticate');
 const userRoute = require('./routes/user-route');
-
+const vehicleRoute = require('./routes/vehicle-route');
 
 
 const app = express();
@@ -17,6 +17,7 @@ app.use(express.json());
 app.use('/auth', authRoute)
 
 app.use('/users', authenticateMiddleware, userRoute)
+app.use('/vehicle', authenticateMiddleware, vehicleRoute)
 
 
 app.use(notFoundMW)
