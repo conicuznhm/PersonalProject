@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const Slot = sequelize.define('Slot', {
         slotName: {
             type: DataTypes.STRING,
+            unique: true,
             allowNull: false,
             validate: {
                 notEmpty: true

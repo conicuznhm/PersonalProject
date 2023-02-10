@@ -8,7 +8,7 @@ const authRoute = require('./routes/auth-route');
 const authenticateMiddleware = require('./middlewares/authenticate');
 const userRoute = require('./routes/user-route');
 const vehicleRoute = require('./routes/vehicle-route');
-
+const parkRoute = require('./routes/park-route');
 
 const app = express();
 app.use(cors());
@@ -18,6 +18,7 @@ app.use('/auth', authRoute)
 
 app.use('/users', authenticateMiddleware, userRoute)
 app.use('/vehicle', authenticateMiddleware, vehicleRoute)
+app.use('/park', authenticateMiddleware, parkRoute)
 
 
 app.use(notFoundMW)

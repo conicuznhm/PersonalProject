@@ -31,7 +31,7 @@ exports.updateVehicle = async (req, res, next) => {
             errorFn('No such vehicle', 400);
         }
         if (vehicle.userId !== req.user.id) {
-            errorFn('You have no permission to remove this vehicle', 403)
+            errorFn('You have no permission to edit', 403)
         }
 
         const value = {
@@ -56,7 +56,7 @@ exports.updateVehicleImage = async (req, res, next) => {
             errorFn('No such vehicle', 400);
         }
         if (vehicle.userId !== req.user.id) {
-            errorFn('You have no permission to remove this vehicle', 403)
+            errorFn('You have no permission to edit', 403)
         }
 
         const vehicleById = await Vehicle.findOne({ where: { id: req.params.vehicleId } })
@@ -67,7 +67,7 @@ exports.updateVehicleImage = async (req, res, next) => {
         }
         else {
             const vehicleImage = await cloudinary.upload(req.file.path, vehiclePublicId)
-            console.log(vehicleImage)
+            // console.log(vehicleImage)
             await Vehicle.update({ vehicleImage }, { where: { id: req.params.vehicleId } })
             res.status(201).json({ vehicleImage })
         }
