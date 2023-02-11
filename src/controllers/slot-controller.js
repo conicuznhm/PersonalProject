@@ -18,3 +18,8 @@
 
 //slot.bulkCreate(value,)
 
+
+
+const { Op } = require("sequelize")
+const { Floor, Park, User } = require("../models")
+const errorFn = require("../utils/error-fn")

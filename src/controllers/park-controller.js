@@ -7,9 +7,9 @@ const errorFn = require('../utils/error-fn');
 exports.createPark = async (req, res, next) => {
     try {
 
-        if (req.user.role !== "offer") {
-            errorFn('You are unauthorized', 403)
-        }
+        // if (req.user.role !== "offer") {
+        //     errorFn('You are unauthorized', 401)
+        // }
 
         const value = req.body;
         if (value.parkImage) {
@@ -29,16 +29,16 @@ exports.createPark = async (req, res, next) => {
 
 exports.updatePark = async (req, res, next) => {
     try {
-        if (req.user.role !== "offer") {
-            errorFn('You are unauthorized', 403)
-        }
+        // if (req.user.role !== "offer") {
+        //     errorFn('You are unauthorized', 401)
+        // }
 
         const park = await Park.findOne({ where: { id: req.params.parkId } })
         if (!park) {
             errorFn('No such park', 400);
         }
         if (park.userId !== req.user.id) {
-            errorFn('You have no permission to remove this park', 403)
+            errorFn('You have no permission to edit this park', 403)
         }
 
         const value = {
@@ -60,9 +60,9 @@ exports.updatePark = async (req, res, next) => {
 
 exports.updateParkImage = async (req, res, next) => {
     try {
-        if (req.user.role !== "offer") {
-            errorFn('You are unauthorized', 403)
-        }
+        // if (req.user.role !== "offer") {
+        //     errorFn('You are unauthorized', 401)
+        // }
 
         const park = await Park.findOne({ where: { id: req.params.parkId } })
         if (!park) {
@@ -90,9 +90,9 @@ exports.updateParkImage = async (req, res, next) => {
 
 exports.deletePark = async (req, res, next) => {
     try {
-        if (req.user.role !== "offer") {
-            errorFn('You are unauthorized', 403)
-        }
+        // if (req.user.role !== "offer") {
+        //     errorFn('You are unauthorized', 401)
+        // }
 
         const park = await Park.findOne({ where: { id: req.params.parkId } })
         if (!park) {
@@ -110,6 +110,14 @@ exports.deletePark = async (req, res, next) => {
 exports.getPark = async (req, res, next) => {
     try {
         const park = await Park.findAll()
+        res.status(200).json(park)
+    } catch (err) { next(err) }
+}
+
+
+exports.getParkByOfferId = async (req, res, next) => {
+    try {
+        const park = await Park.findAll({ where: { userId: req.user.id } })
         res.status(200).json(park)
     } catch (err) { next(err) }
 }
