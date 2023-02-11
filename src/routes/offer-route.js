@@ -30,8 +30,13 @@ router.delete('/floor/:floorId', floorController.deleteFloor);
 
 
 //slot
-// router.post('/slot', slotController.createSlot)
+router.get('/all/slot', slotController.getSlot)
+router.get('/:floorId/slot', slotController.getSlotByFloorId);
 
+router.post('/slot', slotController.createSlot)
+router.post('/slot/add', slotController.addSlot)
+router.patch('/slot/:slotId', slotController.updateSlot)
+router.delete('/slot/:slotId', slotController.deleteSlot)
 
 
 module.exports = router;

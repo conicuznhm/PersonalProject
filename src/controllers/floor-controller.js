@@ -65,7 +65,8 @@ const errorFn = require("../utils/error-fn")
 //need parkId in body from request  (req.body.parkId)
 exports.createFloor = async (req, res, next) => {
     try {
-        const parkId = req.body.parkId
+        // const parkId = req.body.parkId
+        const { parkId, floorName } = req.body
         const park = await Park.findOne({ where: { id: parkId } })
         if (req.user.id !== park.userId) {
             errorFn('You are unauthorized', 401);
@@ -73,8 +74,8 @@ exports.createFloor = async (req, res, next) => {
 
         const existFloor = await Floor.findOne({
             where: {
-                parkId: req.body.parkId,
-                floorName: req.body.floorName
+                parkId: parkId,
+                floorName: floorName
             }
         })
 
@@ -83,13 +84,11 @@ exports.createFloor = async (req, res, next) => {
         }
 
         const value = req.body
-        value.parkId = parkId
         const floor = await Floor.create(value);
         res.status(201).json({ floor })
 
     } catch (err) { next(err) }
 }
-
 
 exports.updateFloor = async (req, res, next) => {
     try {
@@ -156,8 +155,6 @@ exports.deleteFloor = async (req, res, next) => {
         }
         const result = await floor.destroy();
         res.status(204).json(result);
-
-        console.log(typeof (result))
 
     } catch (err) { next(err) }
 }

@@ -1,6 +1,7 @@
 const express = require('express');
 const parkController = require('../controllers/park-controller');
 const floorController = require('../controllers/floor-controller');
+const slotController = require('../controllers/slot-controller');
 // const upload = require('../middlewares/upload');
 
 const router = express.Router();
@@ -29,6 +30,8 @@ router.get('/:parkId/floor', floorController.getFloorByParkId)
 // // router.delete('/floor/:floorId', floorController.deleteFloor);
 
 //slot
-// router.get('/slot',slotController.getSlot)
+router.get('/slot', slotController.getSlot);
+router.get('/:floorId/slot', slotController.getSlotByFloorId);
+router.patch('/slot/:slotId', slotController.updateSlot);
 
 module.exports = router;

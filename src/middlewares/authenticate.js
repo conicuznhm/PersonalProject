@@ -23,9 +23,9 @@ module.exports = async (req, res, next) => {
         }
         req.user = user;
 
-        console.log(req)
-        console.log(authorization)
-        console.log(user)
+        // console.log(req)
+        // console.log(authorization)
+        // console.log(user)
 
         next();
     } catch (err) { next(err) }
