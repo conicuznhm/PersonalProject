@@ -115,7 +115,6 @@ exports.deleteSlot = async (req, res, next) => {
 }
 
 
-
 exports.getSlot = async (req, res, next) => {
     try {
         const slot = await Slot.findAll();
