@@ -5,8 +5,9 @@ const enumEl = ["reserve", "times_up", "cancel", "activated"]
 const reserveSchema = Joi.object({
     slotName: Joi.string().trim().required(),
     // floor:Joi.string().trim().required(),
-    timeStart: Joi.date().iso().greater('now').required(),
-    timeEnd: Joi.date().iso().greater('now').required(),
+    // timeStart: Joi.date().iso().greater('now').required(),
+    timeStart: Joi.date().greater('now').required(),
+    timeEnd: Joi.date().greater('now').required(),
     reserveCost: Joi.decimal().required(),
     isPaid: Joi.boolean().required(),
     status: Joi.string().valid(...enumEl).required()

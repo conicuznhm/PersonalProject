@@ -12,8 +12,21 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: true
-        }
-
+        },
+        // timeStart: {
+        //     type: DataTypes.DATE,
+        //     allowNull: false,
+        //     validate: {
+        //         notEmpty: true
+        //     }
+        // },
+        // timeEnd: {
+        //     type: DataTypes.DATE,
+        //     allowNull: false,
+        //     validate: {
+        //         notEmpty: true
+        //     }
+        // }
     }, { underscored: true })
 
     Slot.associate = db => {
