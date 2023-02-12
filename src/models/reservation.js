@@ -8,13 +8,13 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true
             }
         },
-        // slotId: {
-        //     type: DataTypes.STRING,
-        //     allowNull: false,
-        //     validate: {
-        //         notEmpty: true
-        //     }
-        // },
+        slotId: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
+        },
         timeStart: {
             type: DataTypes.DATE,
             allowNull: false,
@@ -29,13 +29,13 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true
             }
         },
-        // priceRate: {
-        //     type: DataTypes.DECIMAL(10, 2),
-        //     allowNull: false,
-        //     validate: {
-        //         notEmpty: true
-        //     }
-        // },
+        priceRate: {
+            type: DataTypes.DECIMAL(10, 2),
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
+        },
         reserveCost: {
             type: DataTypes.DECIMAL(10, 2),
             defaultValue: 0

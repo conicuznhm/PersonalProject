@@ -13,20 +13,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: true
         },
-        // timeStart: {
-        //     type: DataTypes.DATE,
-        //     allowNull: false,
-        //     validate: {
-        //         notEmpty: true
-        //     }
-        // },
-        // timeEnd: {
-        //     type: DataTypes.DATE,
-        //     allowNull: false,
-        //     validate: {
-        //         notEmpty: true
-        //     }
-        // }
+        timeStart: {
+            type: DataTypes.DATE,
+        },
+        timeEnd: {
+            type: DataTypes.DATE,
+        }
     }, { underscored: true })
 
     Slot.associate = db => {

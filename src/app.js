@@ -52,8 +52,5 @@ app.listen(port, () => console.log(chalk.yellowBright.bold(`server on port: ${po
 
 
 
-
-
-
 //////// const { sequelize } = require('./models');
 //////// sequelize.sync({ force: true });
