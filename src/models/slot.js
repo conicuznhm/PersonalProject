@@ -29,6 +29,14 @@ module.exports = (sequelize, DataTypes) => {
             },
             onDelete: 'RESTRICT'
         })
+
+        Slot.hasMany(db.Reservation, {
+            foreignKey: {
+                name: 'slotId',
+                allowNull: false
+            },
+            onDelete: 'RESTRICT'
+        })
     }
     return Slot
 }

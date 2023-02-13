@@ -1,20 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const status = ['reserve', 'timesUp', 'cancel', 'activated']
     const Reservation = sequelize.define('Reservation', {
-        slotName: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                notEmpty: true
-            }
-        },
-        slotId: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                notEmpty: true
-            }
-        },
         timeStart: {
             type: DataTypes.DATE,
             allowNull: false,
@@ -70,6 +56,14 @@ module.exports = (sequelize, DataTypes) => {
             onDelete: 'RESTRICT'
         })
 
+        Reservation.belongsTo(db.Slot, {
+            foreignKey: {
+                name: 'slotId',
+                allowNull: false
+            },
+            onDelete: 'RESTRICT'
+        })
+
         Reservation.hasOne(db.Slip, {
             foreignKey: {
                 name: 'reservationId',
@@ -81,3 +75,26 @@ module.exports = (sequelize, DataTypes) => {
 
     return Reservation
 }
+
+
+
+
+
+
+
+
+
+// slotName: {
+//     type: DataTypes.STRING,
+//     allowNull: false,
+//     validate: {
+//         notEmpty: true
+//     }
+// },
+// slotId: {
+//     type: DataTypes.STRING,
+//     allowNull: false,
+//     validate: {
+//         notEmpty: true
+//     }
+// },
