@@ -117,11 +117,43 @@ exports.deleteSlot = async (req, res, next) => {
 
 exports.getSlot = async (req, res, next) => {
     try {
-        const slot = await Slot.findAll();
+        const slot = await Slot.findAll({
+            include: {
+                model: Floor,
+                include: {
+                    model: Park
+                }
+            }
+        });
         res.status(200).json(slot);
     } catch (err) { next(err) }
 }
 
-exports.getSlotByFloorId = async (req, res, next) => {
 
-}
+
+
+
+// exports.getSlotByFloorId = async (req, res, next) => {
+
+// }
+
+
+
+
+
+
+// exports.getFloorIncludeAll = async (req, res, next) => {
+//     try {
+//         const floor = await Floor.findAll({
+//             // where: {},
+//             include: {
+//                 model: Park,
+//                 include: {
+//                     model: User,
+//                     attributes: { exclude: ['password'] }
+//                 }
+//             }
+//         });
+//         res.status(200).json(floor)
+//     } catch (err) { next(err) }
+// }

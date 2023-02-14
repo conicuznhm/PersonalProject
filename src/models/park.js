@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true
             }
         },
-        maxSlot: {
+        floorAmount: {
             type: DataTypes.INTEGER,
             allowNull: false,
             validate: {

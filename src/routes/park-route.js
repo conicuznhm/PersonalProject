@@ -17,7 +17,7 @@ router.get('/', parkController.getPark);
 // router.delete('/:parkId', parkController.deletePark);
 
 //floor
-// router.get('/floor', floorController.getFloor)
+router.get('/floor', floorController.getFloor)
 router.get('/:parkId/floor', floorController.getFloorByParkId)
 
 // // router.post('/:parkId/floor', floorController.createFloor);
@@ -31,7 +31,13 @@ router.get('/:parkId/floor', floorController.getFloorByParkId)
 
 //slot
 router.get('/slot', slotController.getSlot);
-router.get('/:floorId/slot', slotController.getSlotByFloorId);
 router.patch('/slot/:slotId', slotController.updateSlot);
 
 module.exports = router;
+
+
+
+
+
+
+// router.get('/:floorId/slot', slotController.getSlotByFloorId);

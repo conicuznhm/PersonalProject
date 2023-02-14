@@ -31,7 +31,7 @@ router.delete('/floor/:floorId', floorController.deleteFloor);
 
 //slot
 router.get('/all/slot', slotController.getSlot)
-router.get('/:floorId/slot', slotController.getSlotByFloorId);
+// router.get('/:floorId/slot', slotController.getSlotByFloorId);
 
 router.post('/slot', slotController.createSlot)
 router.post('/slot/add', slotController.addSlot)

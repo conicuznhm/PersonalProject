@@ -54,7 +54,7 @@ exports.getReservation = async (req, res, next) => {
 }
 
 
-exports.getReservationByCarId = async (req, res, next) => {
+exports.getReservationByVehicleId = async (req, res, next) => {
     try {
         const vehicle = await Vehicle.findOne({ where: { id: req.params.vehicleId } })
         if (vehicle.userId !== req.user.id) {
