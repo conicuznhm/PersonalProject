@@ -21,8 +21,10 @@ cron.schedule('*/10 * * * * *', async () => {   //run every 10 sec
 
             // Update the status of each row
             rows.forEach(async (row) => {
-                const currentTime = moment();
-                if (!(currentTime.isAfter(moment(row.timeStart)) && currentTime.isBefore(moment(row.timeEnd)))) {
+                const currentT = new Date();
+                const currentTime = moment(currentT);
+                // if (!(currentTime.isAfter(moment(row.timeStart)) && currentTime.isBefore(moment(row.timeEnd)))) 
+                if (currentTime.isAfter(moment(row.timeEnd))) {
                     await row.update({ isAvailable: true });
                     await Reservation.update({ status: activated }, { where: { slotId: row.id } });
                 }
