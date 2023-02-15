@@ -10,6 +10,8 @@ const router = express.Router();
 // router.get('/', parkController.getPark);
 router.get('/', parkController.getParkByOfferId);
 router.post('/', upload.single('parkImage'), parkController.createPark);
+// router.post('/auto', upload.single('parkImage'), parkController.createParkAuto);
+
 router.patch('/:parkId', parkController.updatePark);
 router.patch('/:parkId/image', upload.single('parkImage'), parkController.updateParkImage);
 router.delete('/:parkId', parkController.deletePark);

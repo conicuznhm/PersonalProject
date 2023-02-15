@@ -27,6 +27,32 @@ exports.createPark = async (req, res, next) => {
     }
 }
 
+//floorAmount floorName slotAmount parkId 
+// exports.createParkAuto = async (req, res, next) => {
+//     try {
+
+//         // if (req.user.role !== "offer") {
+//         //     errorFn('You are unauthorized', 401)
+//         // }
+
+//         const value = req.body;
+//         if (value.parkImage) {
+//             value.vehicleImage = await cloudinary.upload(value.vehicleImage)
+//         }
+
+//         value.userId = req.user.id;
+//         const park = await Park.create(value);
+//         res.status(201).json({ park })
+//     } catch (err) { next(err) }
+//     finally {
+//         if (req.file) {
+//             fs.unlinkSync(req.file.path)
+//         }
+//     }
+// }
+
+
+
 exports.updatePark = async (req, res, next) => {
     try {
         // if (req.user.role !== "offer") {

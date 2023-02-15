@@ -6,6 +6,7 @@ const router = express.Router();
 router.get('/', reserveController.getReservation);
 router.get('/:vehicleId', reserveController.getReservationByVehicleId);
 router.post('/', reserveController.createReservation);
+router.patch('/:reserveId', reserveController.updateReservation);
 
 // router.patch('/reserveId', reserveController.updateReservation);
 // router.delete('/:reserveId', reserveController.deleteReservation);

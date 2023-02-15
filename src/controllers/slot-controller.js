@@ -26,6 +26,10 @@ exports.createSlot = async (req, res, next) => {
     try {
         const { floorId } = req.body
         const { floorName, slotAmount, parkId } = await Floor.findOne({ where: { id: floorId } });
+        // const slotArray = await Slot.findAll({
+        //     attributes: ['floorId'],
+        //     group: 'floorId'
+        // })
 
         const park = await Park.findOne({ where: { id: parkId } })
         if (req.user.id !== park.userId) {
@@ -37,6 +41,11 @@ exports.createSlot = async (req, res, next) => {
             errorFn('The floor already has slot', 400)
         }
 
+        // if (slotArray.length >= park.floorAmount) {
+        //     errorFn(`This park has only ${park.floorAmount} floor`, 400)
+        // }
+
+
         const startName = 1;
         const value = [];
         for (let idx = startName; idx <= slotAmount; idx++) {
@@ -45,7 +54,6 @@ exports.createSlot = async (req, res, next) => {
 
         const slot = await Slot.bulkCreate(value);
         res.status(201).json(slot);
-
     } catch (err) { next(err) }
 }
 

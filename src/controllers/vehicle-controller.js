@@ -94,3 +94,11 @@ exports.deleteVehicle = async (req, res, next) => {
     } catch (err) { next(err) }
 }
 
+exports.getVehicle = async (req, res, next) => {
+    try {
+        const result = await Vehicle.findAll()
+        res.status(200).json(result);
+    } catch (err) {
+        next(err)
+    }
+}
