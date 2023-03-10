@@ -135,7 +135,15 @@ exports.deletePark = async (req, res, next) => {
     if (park.userId !== req.user.id) {
       errorFn("You have no permission to remove this park", 403);
     }
-    const result = await park.destroy();
+    await Slot.destroy({
+      where: { parkId: req.params.parkId, deletedAt: null },
+    });
+    await Floor.destroy({
+      where: { parkId: req.params.parkId, deletedAt: null },
+    });
+    const result = await park.destroy({
+      where: { id: req.params.parkId, deletedAt: null },
+    });
     res.status(204).json(result);
   } catch (err) {
     next(err);

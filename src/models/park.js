@@ -17,13 +17,13 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: true,
         },
       },
-      floorAmount: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
-      },
+      // floorAmount: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   validate: {
+      //     notEmpty: true,
+      //   },
+      // },
       priceRate: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
@@ -66,6 +66,14 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Park.hasMany(db.Floor, {
+      foreignKey: {
+        name: "parkId",
+        allowNull: false,
+      },
+      onDelete: "RESTRICT",
+    });
+
+    Park.hasMany(db.Slot, {
       foreignKey: {
         name: "parkId",
         allowNull: false,

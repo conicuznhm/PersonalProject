@@ -144,55 +144,34 @@ exports.getReservationByVehicleId = async (req, res, next) => {
   }
 };
 
-// const selectStart = "2023-02-15T09:00:00+07:00";
-// const selectEnd = "2023-02-15T11:00:00+07:00";
+//time
+// // Assume reservations is an array of reserved time slots in ISO format
+// const reservations = [
+//   { start: "2023-03-10T14:30:00.000Z", end: "2023-03-10T15:00:00.000Z" },
+//   { start: "2023-03-10T16:00:00.000Z", end: "2023-03-10T17:00:00.000Z" },
+//   // ...
+// ];
+// function isDurationAvailable(start, end) {
+//   const startMillis = new Date(start).getTime();
+//   const endMillis = new Date(end).getTime();
+//   for (let reservation of reservations) {
+//     const resStartMillis = new Date(reservation.start).getTime();
+//     const resEndMillis = new Date(reservation.end).getTime();
+//     if (startMillis < resEndMillis && endMillis > resStartMillis) {
+//       return false; // duration overlaps with a reserved time slot
+//     }
+//   }
+//   return true; // duration does not overlap with any reserved time slots
+// }
 
-//add+++++++++++++++++++++++++++++++++++++
-// const isSlotNotFree = await Slot.findOne({
-//     where: {
-//         id: slotId,
-//         [Op.or]: [
-//             {
-//                 [Op.and]: [
-//                     {
-//                         timeStart: {
-//                             [Op.lt]: selectEnd,
-//                         },
-//                         timeStart: {
-//                             [Op.gt]: selectStart,
-//                         },
-//                     },
-//                     {
-//                         timeEnd: {
-//                             [Op.lt]: selectEnd,
-//                         },
-//                         timeEnd: {
-//                             [Op.gt]: selectStart,
-//                         },
-//                     },
-//                 ],
-//             },
-//             {
-//                 [Op.and]: [
-//                     {
-//                         timeStart: {
-//                             [Op.lt]: selectEnd,
-//                         },
-//                         timeStart: {
-//                             [Op.gt]: selectStart,
-//                         },
-//                     },
-//                     {
-//                         timeEnd: {
-//                             [Op.lt]: selectEnd,
-//                         },
-//                         timeEnd: {
-//                             [Op.gt]: selectStart,
-//                         },
-//                     },
-//                 ],
-//             },
-//         ],
-//     },
-// })
-//add++++++++++++++++++++++++++++
+// // Usage example:
+// // const durationStart = "2023-03-10T15:30:00.000Z";
+// // const durationEnd = "2023-03-10T16:30:00.000Z";
+// const durationStart = "2023-01-10T15:30:00.000Z";
+// const durationEnd = "2023-02-10T16:30:00.000Z";
+
+// if (isDurationAvailable(durationStart, durationEnd)) {
+//   console.log("Duration is available!");
+// } else {
+//   console.log("Duration is already reserved.");
+// }

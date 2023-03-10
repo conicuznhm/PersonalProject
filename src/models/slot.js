@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       slotName: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
         validate: {
           notEmpty: true,
@@ -29,6 +28,14 @@ module.exports = (sequelize, DataTypes) => {
     Slot.belongsTo(db.Floor, {
       foreignKey: {
         name: "floorId",
+        allowNull: false,
+      },
+      onDelete: "RESTRICT",
+    });
+
+    Slot.belongsTo(db.Park, {
+      foreignKey: {
+        name: "parkId",
         allowNull: false,
       },
       onDelete: "RESTRICT",
