@@ -6,7 +6,9 @@
   "scripts": {
     "start": "nodemon src/app.js",
     "cron": "nodemon src/cronJob.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sync": "node src/forSync.js",
+    "seed": "node src/seedDB.js"
   },
   "keywords": [],
   "author": "",

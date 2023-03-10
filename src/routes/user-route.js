@@ -1,18 +1,19 @@
-const express = require('express');
-const userController = require('../controllers/user-controller');
+const express = require("express");
+const userController = require("../controllers/user-controller");
 
-const upload = require('../middlewares/upload');
+const upload = require("../middlewares/upload");
 const router = express.Router();
 
-router.get('/:userId', userController.getUserInfoById)
+router.get("/", userController.getUserInfo);
+router.get("/:userId", userController.getUserInfoById);
 
-router.patch('/', userController.updateProfile)
+router.patch("/", userController.updateProfile);
 
 // upload.single('profileImage')
-router.patch('/image', upload.fields([
-    { name: 'profileImage', maxCount: 1 }
-]),
-    userController.updateProfileImage
+router.patch(
+  "/image",
+  upload.fields([{ name: "profileImage", maxCount: 1 }]),
+  userController.updateProfileImage,
 );
 
 module.exports = router;
