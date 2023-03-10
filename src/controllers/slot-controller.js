@@ -150,6 +150,7 @@ exports.getSlot = async (req, res, next) => {
 exports.getRedSlot = async (req, res, next) => {
   try {
     const { start, end } = req.query;
+    const { parkId } = req.params;
     // const start = "2023-04-14 16:00:00";
     // const end = "2023-04-16 16:00:00";
     // const st = new Date("2023-04-14 16:00:00");
@@ -160,15 +161,28 @@ exports.getRedSlot = async (req, res, next) => {
           { timeStart: { [Op.lte]: end } },
           { timeEnd: { [Op.gte]: start } },
         ],
+        parkId,
         deletedAt: null,
       },
-      include: {
-        model: Floor,
-        include: {
-          model: Park,
+      // include: {
+      //   model: Floor,
+      //   include: {
+      //     model: Park,
+      //   },
+      // },
+    });
+    const arrId = slot.map((el) => el.id);
+    console.log(arrId);
+    await Slot.update(
+      { isAvailable: 0 },
+      {
+        where: {
+          id: {
+            [Op.in]: arrId,
+          },
         },
       },
-    });
+    );
     res.status(200).json(slot);
   } catch (err) {
     next(err);

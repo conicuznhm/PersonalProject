@@ -78,6 +78,7 @@ exports.createReservation = async (req, res, next) => {
       errorFn("Can not reserve the park lot");
     }
     const reservation = await Reservation.create(value);
+
     res.status(201).json(reservation);
   } catch (err) {
     next(err);
