@@ -1,6 +1,6 @@
 const fs = require("fs");
 const { Op } = require("sequelize");
-const { Park } = require("../models");
+const { Park, Floor, Slot } = require("../models");
 const cloudinary = require("../utils/cloudinary");
 const errorFn = require("../utils/error-fn");
 
@@ -117,15 +117,15 @@ exports.updateParkImage = async (req, res, next) => {
     }
   } catch (err) {
     next(err);
+  } finally {
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
   }
 };
 
 exports.deletePark = async (req, res, next) => {
   try {
-    // if (req.user.role !== "offer") {
-    //     errorFn('You are unauthorized', 401)
-    // }
-
     const park = await Park.findOne({
       where: { id: req.params.parkId, deletedAt: null },
     });
@@ -155,6 +155,7 @@ exports.getParkByOfferId = async (req, res, next) => {
   try {
     const park = await Park.findAll({
       where: { userId: req.user.id, deletedAt: null },
+      include: { model: Floor, include: { model: Slot } },
     });
     res.status(200).json(park);
   } catch (err) {

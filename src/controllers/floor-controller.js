@@ -1,72 +1,15 @@
 const { Op } = require("sequelize");
-const { Floor, Park, User } = require("../models");
+const { Floor, Park, Slot } = require("../models");
 const errorFn = require("../utils/error-fn");
 
-// exports.createFloor = async (req, res, next) => {
-//     try {
-//         if (req.user.role !== "offer") {
-//             errorFn('You are unauthorized', 403);
-//         }
-
-//         const parkId = req.params.parkId
-//         const park = await Park.findOne({ where: { id: parkId } })
-//         if (req.user.id !== park.userId) {
-//             errorFn('You are unauthorized', 403);
-//         }
-
-//         const existFloor = await Floor.findOne({
-//             where: {
-//                 parkId: req.params.parkId,
-//                 floorName: req.body.floorName
-//             }
-//         })
-
-//         if (existFloor) {
-//             errorFn('The floor has already existed')
-//         }
-
-//         const value = req.body
-//         value.parkId = parkId
-//         const floor = await Floor.create(value);
-//         res.status(201).json({ floor })
-
-//     } catch (err) { next(err) }
-// }
-
-// exports.updateFloor = async (req, res, next) => {
-//     try {
-//         if (req.user.role !== "offer") {
-//             errorFn('You are unauthorized', 403);
-//         }
-//         const floor = await Floor.findOne({
-//             where: {
-//                 id: req.params.floorId,
-//                 parkId: req.params.parkId
-//             }
-//         })
-//         if (!floor) {
-//             errorFn('No have such a floor')
-//         }
-//         const value = {
-//             floorName: req.body.floorName,
-//             slotAmount: req.body.slotAmount,
-//             isAvailable: req.body.isAvailable
-//         }
-//         const result = await Floor.update(value, {
-//             where: {
-//                 id: req.params.floorId,
-//                 parkId: req.params.parkId
-//             }
-//         })
-//         res.status(201).json(result)
-//     } catch (err) { next(err) }
-// }
-
-//need parkId in body from request  (req.body.parkId)
+//{partId,floorName,slotAmount,}
 exports.createFloor = async (req, res, next) => {
   try {
-    // const parkId = req.body.parkId
-    const { parkId, floorName } = req.body;
+    // const result = await sequelize.transaction(async (t) => {
+    //   return floor
+    // })
+
+    const { parkId, floorName, slotAmount } = req.body;
     const park = await Park.findOne({ where: { id: parkId, deletedAt: null } });
     if (req.user.id !== park.userId) {
       errorFn("You are unauthorized", 401);
@@ -84,9 +27,30 @@ exports.createFloor = async (req, res, next) => {
       errorFn("The floor has already existed", 400);
     }
 
-    const value = req.body;
-    const floor = await Floor.create(value);
-    res.status(201).json({ floor });
+    // const floor = await Floor.create(req.body);
+    const floor = await Floor.create({ parkId, floorName, slotAmount });
+
+    //========= Create slot ==========//
+    const startName = 1;
+    const slots = [];
+    for (let idx = startName; idx <= slotAmount; idx++) {
+      slots.push({
+        slotName: +floor.floorName * 1000 + idx + "",
+        isAvailable: true,
+        floorId: floor.id,
+      });
+    }
+    const slot = await Slot.bulkCreate(slots);
+    //========= Create slot ==========//
+
+    if (!slot) {
+      errorFn(
+        "Cannot create the floor, since the slot cannot be posted!!!",
+        400,
+      );
+    }
+
+    res.status(201).json(floor);
   } catch (err) {
     next(err);
   }
@@ -94,20 +58,6 @@ exports.createFloor = async (req, res, next) => {
 
 exports.updateFloor = async (req, res, next) => {
   try {
-    // // const {floorId:id} = req.params
-    // const floor = await Floor.findOne({ where: { id: req.params.floorId } });
-    // if (!floor) {
-    //     errorFn('The floor does not exist', 400);
-    // }
-    // //deconstruct
-    // const { floorName, slotAmount, isAvailable, parkId } = req.body;
-
-    // const park = await Park.findOne({ where: { id: parkId } })
-    // if (park.userId !== req.user.id) {
-    //     errorFn('You have no permission to edit this floor');
-    // }
-
-    // const {floorId:id} = req.params
     const floor = await Floor.findOne({
       where: { id: req.params.floorId, deletedAt: null },
     });
@@ -191,19 +141,3 @@ exports.getFloorByParkId = async (req, res, next) => {
     next(err);
   }
 };
-
-// exports.getFloorIncludeAll = async (req, res, next) => {
-//     try {
-//         const floor = await Floor.findAll({
-//             // where: {},
-//             include: {
-//                 model: Park,
-//                 include: {
-//                     model: User,
-//                     attributes: { exclude: ['password'] }
-//                 }
-//             }
-//         });
-//         res.status(200).json(floor)
-//     } catch (err) { next(err) }
-// }

@@ -1,19 +1,3 @@
-//floor:2
-//slot_amount = 100
-// const value = []
-// for(let idx=0;idx<slot_amount;idx++){
-//     value.push({slotName:(floor*1000+idx),isAvailable:true,floorId:floor})
-// }
-//const value = [
-//     {slotName:2001, isAvailable, floorId:2},
-//     {slotName:2002, isAvailable, floorId:2},
-//     {slotName:2003, isAvailable, floorId:2},
-//     {slotName:2004, isAvailable, floorId:2}
-//     {slotName:2005, isAvailable, floorId:2}
-// ]
-
-//slot.bulkCreate(value,)
-
 const { Op } = require("sequelize");
 const { Slot, Floor, Park } = require("../models");
 const errorFn = require("../utils/error-fn");
@@ -26,10 +10,6 @@ exports.createSlot = async (req, res, next) => {
     const { floorName, slotAmount, parkId } = await Floor.findOne({
       where: { id: floorId, deletedAt: null },
     });
-    // const slotArray = await Slot.findAll({
-    //     attributes: ['floorId'],
-    //     group: 'floorId'
-    // })
 
     const park = await Park.findOne({ where: { id: parkId, deletedAt: null } });
     if (req.user.id !== park.userId) {
@@ -42,10 +22,6 @@ exports.createSlot = async (req, res, next) => {
     if (existFloor) {
       errorFn("The floor already has slot", 400);
     }
-
-    // if (slotArray.length >= park.floorAmount) {
-    //     errorFn(`This park has only ${park.floorAmount} floor`, 400)
-    // }
 
     const startName = 1;
     const value = [];
@@ -170,23 +146,3 @@ exports.getSlot = async (req, res, next) => {
     next(err);
   }
 };
-
-// exports.getSlotByFloorId = async (req, res, next) => {
-
-// }
-
-// exports.getFloorIncludeAll = async (req, res, next) => {
-//     try {
-//         const floor = await Floor.findAll({
-//             // where: {},
-//             include: {
-//                 model: Park,
-//                 include: {
-//                     model: User,
-//                     attributes: { exclude: ['password'] }
-//                 }
-//             }
-//         });
-//         res.status(200).json(floor)
-//     } catch (err) { next(err) }
-// }

@@ -112,7 +112,9 @@ exports.deleteVehicle = async (req, res, next) => {
 
 exports.getVehicle = async (req, res, next) => {
   try {
-    const result = await Vehicle.findAll({ where: { deletedAt: null } });
+    const result = await Vehicle.findAll({
+      where: { userId: req.user.id, deletedAt: null },
+    });
     res.status(200).json(result);
   } catch (err) {
     next(err);

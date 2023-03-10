@@ -21,7 +21,7 @@ app.use("/auth", authRoute);
 
 app.use("/users", authenticateMiddleware, userRoute);
 app.use("/vehicle", authenticateMiddleware, vehicleRoute);
-app.use("/park", authenticateMiddleware, offerMiddleware, parkRoute);
+app.use("/park", authenticateMiddleware, parkRoute);
 app.use("/offer", authenticateMiddleware, offerMiddleware, offerRoute); //
 app.use("/reserve", authenticateMiddleware, reserveRoute);
 
