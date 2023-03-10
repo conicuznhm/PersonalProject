@@ -7,7 +7,7 @@ const { Slot, Reservation } = require('./models');
 
 // run every 1 hour 0 min   moment() date time
 // cron.schedule('0 0 * * * *', async () => {
-cron.schedule('*/10 * * * * *', async () => {   //run every 10 sec
+cron.schedule('*/2 * * * * *', async () => {   //run every 10 sec
     try {
         // Get the total count of rows in Slot
         const count = await Slot.count();
