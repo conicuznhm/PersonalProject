@@ -146,3 +146,31 @@ exports.getSlot = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getRedSlot = async (req, res, next) => {
+  try {
+    const { start, end } = req.query;
+    // const start = "2023-04-14 16:00:00";
+    // const end = "2023-04-16 16:00:00";
+    // const st = new Date("2023-04-14 16:00:00");
+    // const ed = new Date("2023-04-16 16:00:00");
+    const slot = await Slot.findAll({
+      where: {
+        [Op.and]: [
+          { timeStart: { [Op.lte]: end } },
+          { timeEnd: { [Op.gte]: start } },
+        ],
+        deletedAt: null,
+      },
+      include: {
+        model: Floor,
+        include: {
+          model: Park,
+        },
+      },
+    });
+    res.status(200).json(slot);
+  } catch (err) {
+    next(err);
+  }
+};

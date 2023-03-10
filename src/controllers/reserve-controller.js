@@ -7,11 +7,12 @@ exports.createReservation = async (req, res, next) => {
   //req.boy => vehicleId parkId slotName floor timeStart timeEnd reserveCost isPaid
   try {
     // const value = req.body;
-    // const { vehicleId, parkId, slotId, floor, selectStart, selectEnd, isPaid } = req.body;
-    const { vehicleId, parkId, slotId, floor, selectEnd, isPaid } = req.body;
+    const { vehicleId, parkId, slotId, floor, selectStart, selectEnd, isPaid } =
+      req.body;
+    // const { vehicleId, parkId, slotId, floor, selectEnd, isPaid } = req.body;
     //
     // const selectStart = moment();
-    const selectStart = new Date();
+    // const selectStart = new Date();
     if (moment(selectStart).isAfter(moment(selectEnd))) {
       errorFn("Cannot reserve the pass time", 400);
     }
