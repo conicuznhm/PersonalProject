@@ -7,6 +7,7 @@ exports.createReservation = async (req, res, next) => {
   //req.boy => vehicleId parkId slotName floor timeStart timeEnd reserveCost isPaid
   try {
     // const value = req.body;
+    const userId = req.user.id;
     const { vehicleId, parkId, slotId, floor, selectStart, selectEnd, isPaid } =
       req.body;
 
@@ -52,6 +53,7 @@ exports.createReservation = async (req, res, next) => {
     const reserveCost = (+priceRate * (end - start)) / (1000 * 60 * 60);
 
     const value = {
+      userId,
       vehicleId,
       parkId,
       floor,
@@ -87,13 +89,37 @@ exports.createReservation = async (req, res, next) => {
 exports.getReservation = async (req, res, next) => {
   try {
     //
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    };
+
     const reservation = await Reservation.findAll({
       where: { deletedAt: null },
       userId: req.user.id,
       include: [{ model: Vehicle }, { model: Park }, { model: Slot }],
     });
-    console.log(reservation);
-    res.status(200).json(reservation);
+
+    const newReservation = reservation.map((el) => {
+      const start = new Date(el.dataValues.timeStart).toLocaleDateString(
+        "en-US",
+        options,
+      );
+      const end = new Date(el.dataValues.timeEnd).toLocaleDateString(
+        "en-US",
+        options,
+      );
+      el.dataValues.timeStart = start;
+      el.dataValues.timeEnd = end;
+      return el;
+    });
+    //no timeStart, timeEnd modify
+    // res.status(200).json(reservation);
+    //timeStart, timeEnd modify
+    res.status(200).json(newReservation);
   } catch (err) {
     next(err);
   }
