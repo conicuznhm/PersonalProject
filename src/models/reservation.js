@@ -28,10 +28,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DECIMAL(10, 2),
         defaultValue: 0,
       },
-      isPaid: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
+      token: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       status: {
         type: DataTypes.ENUM(...status),
@@ -67,6 +66,14 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "RESTRICT",
     });
 
+    Reservation.belongsTo(db.User, {
+      foreignKey: {
+        name: "userId",
+        allowNull: false,
+      },
+      onDelete: "RESTRICT",
+    });
+
     Reservation.hasOne(db.Slip, {
       foreignKey: {
         name: "reservationId",
@@ -93,3 +100,9 @@ module.exports = (sequelize, DataTypes) => {
 //         notEmpty: true
 //     }
 // },
+
+// foreignKey: {
+//   name: "userId",
+//   allowNull: false,
+// },
+// onDelete: "RESTRICT",

@@ -9,12 +9,16 @@ exports.createReservation = async (req, res, next) => {
     // const value = req.body;
     const { vehicleId, parkId, slotId, floor, selectStart, selectEnd, isPaid } =
       req.body;
-    // const { vehicleId, parkId, slotId, floor, selectEnd, isPaid } = req.body;
-    //
-    // const selectStart = moment();
-    // const selectStart = new Date();
-    if (moment(selectStart).isAfter(moment(selectEnd))) {
-      errorFn("Cannot reserve the pass time", 400);
+
+    if (selectStart >= selectEnd) {
+      errorFn("End time must greater than start time", 400);
+    }
+    const start = new Date(selectStart);
+    const end = new Date(selectEnd);
+
+    const duration = (end - start) / 1000 / 60 / 60;
+    if (duration < 1) {
+      errorFn("The reserve duration time should greater than 1 hour", 400);
     }
 
     const vehicle = await Vehicle.findOne({
@@ -42,16 +46,11 @@ exports.createReservation = async (req, res, next) => {
       errorFn(`The slot ${slotName} is unavailable`, 400);
     }
 
-    // if (isSlotNotFree) {
-    //     errorFn(`The slot ${slot.slotName} is unavailable`, 400);
-    // }
     const priceRate = park.priceRate;
-    const end = new Date(selectEnd);
-    const start = new Date(selectStart);
+    // const end = new Date(selectEnd);
+    // const start = new Date(selectStart);
     const reserveCost = (+priceRate * (end - start)) / (1000 * 60 * 60);
-    // const reserveCost = +priceRate * (moment(selectEnd).hour() - moment(selectStart).hour());
-    // const reserveCost = +priceRate * (selectEnd.getHours() - selectStart.getHours());
-    // const reserveCost = priceRate;
+
     const value = {
       vehicleId,
       parkId,
@@ -66,17 +65,17 @@ exports.createReservation = async (req, res, next) => {
       reserveCost,
     };
 
-    const result = await Slot.update(
-      {
-        isAvailable: false,
-        timeStart: selectStart,
-        timeEnd: selectEnd,
-      },
-      { where: { id: slotId } },
-    );
-    if (!result) {
-      errorFn("Can not reserve the park lot");
-    }
+    // const result = await Slot.update(
+    //   {
+    //     // isAvailable: false,
+    //     timeStart: selectStart,
+    //     timeEnd: selectEnd,
+    //   },
+    //   { where: { id: slotId } },
+    // );
+    // if (!result) {
+    //   errorFn("Can not reserve the park lot");
+    // }
     const reservation = await Reservation.create(value);
 
     res.status(201).json(reservation);
@@ -90,8 +89,10 @@ exports.getReservation = async (req, res, next) => {
     //
     const reservation = await Reservation.findAll({
       where: { deletedAt: null },
+      userId: req.user.id,
       include: [{ model: Vehicle }, { model: Park }, { model: Slot }],
     });
+    console.log(reservation);
     res.status(200).json(reservation);
   } catch (err) {
     next(err);

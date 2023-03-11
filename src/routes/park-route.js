@@ -16,7 +16,8 @@ router.get("/:parkId/floor", floorController.getFloorByParkId);
 
 //slot
 router.get("/slot", slotController.getSlot);
-router.get("/:parkId/redslot", slotController.getRedSlot);
+router.get("/:parkId/slot", slotController.getSlotByParkId);
+// router.get("/:parkId/redslot", slotController.getRedSlot);
 router.patch("/slot/:slotId", slotController.updateSlot);
 
 module.exports = router;

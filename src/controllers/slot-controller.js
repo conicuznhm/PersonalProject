@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Slot, Floor, Park } = require("../models");
+const { Slot, Floor, Park, Reservation } = require("../models");
 const errorFn = require("../utils/error-fn");
 
 //get  floorId from req.body
@@ -147,15 +147,30 @@ exports.getSlot = async (req, res, next) => {
   }
 };
 
-exports.getRedSlot = async (req, res, next) => {
+//use
+exports.getSlotByParkId = async (req, res, next) => {
   try {
-    const { start, end } = req.query;
+    // const { start, end } = req.query;
     const { parkId } = req.params;
-    // const start = "2023-04-14 16:00:00";
-    // const end = "2023-04-16 16:00:00";
-    // const st = new Date("2023-04-14 16:00:00");
-    // const ed = new Date("2023-04-16 16:00:00");
-    const slot = await Slot.findAll({
+    const now = new Date();
+    const {
+      start = now.toISOString().slice(0, 16),
+      end = new Date(now.getTime() + 60000 * 60).toISOString().slice(0, 16),
+    } = req.query;
+    if (start >= end) {
+      errorFn("End time must greater than start time", 400);
+    }
+    const st = new Date(start);
+    const ed = new Date(end);
+    // const st = new Date(start).getTime();
+    // const ed = new Date(end).getTime();
+    const duration = (ed - st) / 1000 / 60 / 60;
+    console.log(duration);
+    if (duration < 1) {
+      errorFn("The reserve duration time should greater than 1 hour", 400);
+    }
+    //find red slot
+    const reservation = await Reservation.findAll({
       where: {
         [Op.and]: [
           { timeStart: { [Op.lte]: end } },
@@ -164,6 +179,11 @@ exports.getRedSlot = async (req, res, next) => {
         parkId,
         deletedAt: null,
       },
+    });
+    const arrId = reservation.map((el) => el.dataValues.slotId);
+    console.log(arrId);
+    const slot = await Slot.findAll({
+      where: { parkId, deletedAt: null },
       // include: {
       //   model: Floor,
       //   include: {
@@ -171,20 +191,62 @@ exports.getRedSlot = async (req, res, next) => {
       //   },
       // },
     });
-    const arrId = slot.map((el) => el.id);
-    console.log(arrId);
-    await Slot.update(
-      { isAvailable: 0 },
-      {
-        where: {
-          id: {
-            [Op.in]: arrId,
-          },
-        },
-      },
-    );
-    res.status(200).json(slot);
+
+    const updateSlot = slot.map((el) => {
+      if (arrId.includes(el.id)) {
+        return { ...el.dataValues, isAvailable: false };
+      }
+      return { ...el.dataValues, isAvailable: true };
+      // return el;
+    });
+    res.status(200).json(updateSlot);
   } catch (err) {
     next(err);
   }
 };
+// start <= timeEnd && end >= timeStart
+// arrId =[3,4]
+// slot = [{id:1, isAvailable: 0 },{id:2, isAvailable: 0 },{},{},{}]
+
+// //no use
+// exports.getRedSlot = async (req, res, next) => {
+//   try {
+//     const { start, end } = req.query;
+//     const { parkId } = req.params;
+//     // const start = "2023-04-14 16:00:00";
+//     // const end = "2023-04-16 16:00:00";
+//     // const st = new Date("2023-04-14 16:00:00");
+//     // const ed = new Date("2023-04-16 16:00:00");
+//     const slot = await Slot.findAll({
+//       where: {
+//         [Op.and]: [
+//           { timeStart: { [Op.lte]: end } },
+//           { timeEnd: { [Op.gte]: start } },
+//         ],
+//         parkId,
+//         deletedAt: null,
+//       },
+//       // include: {
+//       //   model: Floor,
+//       //   include: {
+//       //     model: Park,
+//       //   },
+//       // },
+//     });
+//     const arrId = slot.map((el) => el.id);
+//     console.log(arrId);
+//     await Slot.update(
+//       { isAvailable: 0 },
+//       {
+//         where: {
+//           id: {
+//             [Op.in]: arrId,
+//           },
+//         },
+//       },
+//     );
+//     res.status(200).json(slot);
+//   } catch (err) {
+//     next(err);
+//   }
+// };
