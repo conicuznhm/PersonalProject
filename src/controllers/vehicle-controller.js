@@ -63,7 +63,6 @@ exports.updateVehicleImage = async (req, res, next) => {
     if (vehicle.userId !== req.user.id) {
       errorFn("You have no permission to edit", 403);
     }
-
     const vehicleById = await Vehicle.findOne({
       where: { id: req.params.vehicleId, deletedAt: null },
     });
@@ -83,6 +82,53 @@ exports.updateVehicleImage = async (req, res, next) => {
       );
       res.status(201).json({ vehicleImage });
     }
+  } catch (err) {
+    next(err);
+  } finally {
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
+  }
+};
+
+exports.editVehicle = async (req, res, next) => {
+  try {
+    const vehicle = await Vehicle.findOne({
+      where: { id: req.params.vehicleId, deletedAt: null },
+    });
+    if (!vehicle) {
+      errorFn("No such vehicle", 400);
+    }
+    if (vehicle.userId !== req.user.id) {
+      errorFn("You have no permission to edit", 403);
+    }
+
+    let value;
+    const { type, brand, license } = req.body;
+    const vehicleById = await Vehicle.findOne({
+      where: { id: req.params.vehicleId, deletedAt: null },
+    });
+    const image = vehicleById.vehicleImage;
+    const vehiclePublicId = image ? cloudinary.getPublicId(image) : null;
+    if (license && req.file) {
+      const vehicleImage = await cloudinary.upload(
+        req.file.path,
+        vehiclePublicId,
+      );
+      value = { type, brand, license, vehicleImage };
+    } else if (license) {
+      value = { type, brand, license };
+    } else if (req.file) {
+      const vehicleImage = await cloudinary.upload(
+        req.file.path,
+        vehiclePublicId,
+      );
+      value = { type, brand, vehicleImage };
+    } else {
+      value = { type, brand };
+    }
+    await Vehicle.update(value, { where: { id: req.params.vehicleId } });
+    res.status(201).json(value);
   } catch (err) {
     next(err);
   } finally {

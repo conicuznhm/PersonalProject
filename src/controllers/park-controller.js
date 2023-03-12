@@ -124,6 +124,70 @@ exports.updateParkImage = async (req, res, next) => {
   }
 };
 
+exports.editPark = async (req, res, next) => {
+  try {
+    const park = await Park.findOne({
+      where: { id: req.params.parkId, deletedAt: null },
+    });
+    if (!park) {
+      errorFn("No such park", 400);
+    }
+    if (park.userId !== req.user.id) {
+      errorFn("You have no permission to edit", 403);
+    }
+
+    let value;
+    const { name, address, priceRate, minReserveTime, isAvailable } = req.body;
+    const parkId = await Park.findOne({
+      where: { id: req.params.parkId, deletedAt: null },
+    });
+    const image = parkId.parkImage;
+    const parkPublicId = image ? cloudinary.getPublicId(image) : null;
+
+    if (name && address) {
+      const parkImage = await cloudinary.upload(req.file.path, parkPublicId);
+      value = {
+        name,
+        address,
+        priceRate,
+        isAvailable: isAvailable || true,
+        parkImage,
+      };
+    } else if (name) {
+      const parkImage = await cloudinary.upload(req.file.path, parkPublicId);
+      value = {
+        name,
+        priceRate,
+        isAvailable: isAvailable || true,
+        parkImage,
+      };
+    } else if (address) {
+      const parkImage = await cloudinary.upload(req.file.path, parkPublicId);
+      value = {
+        address,
+        priceRate,
+        isAvailable: isAvailable || true,
+        parkImage,
+      };
+    } else {
+      const parkImage = await cloudinary.upload(req.file.path, parkPublicId);
+      value = {
+        priceRate,
+        isAvailable: isAvailable || true,
+        parkImage,
+      };
+    }
+    await Park.update(value, { where: { id: req.params.parkId } });
+    res.status(201).json(value);
+  } catch (err) {
+    next(err);
+  } finally {
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
+  }
+};
+
 exports.deletePark = async (req, res, next) => {
   try {
     const park = await Park.findOne({
