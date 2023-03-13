@@ -96,9 +96,10 @@ exports.getReservation = async (req, res, next) => {
       hour: "numeric",
       minute: "numeric",
     };
+    const now = new Date();
 
     const reservation = await Reservation.findAll({
-      where: { deletedAt: null },
+      where: { [Op.and]: [{ timeEnd: { [Op.gte]: now } }], deletedAt: null },
       userId: req.user.id,
       include: [{ model: Vehicle }, { model: Park }, { model: Slot }],
     });

@@ -14,7 +14,7 @@ exports.createVehicle = async (req, res, next) => {
 
     value.userId = req.user.id;
     const vehicle = await Vehicle.create(value);
-    res.status(201).json({ vehicle });
+    res.status(201).json(vehicle);
   } catch (err) {
     next(err);
   } finally {
@@ -127,8 +127,15 @@ exports.editVehicle = async (req, res, next) => {
     } else {
       value = { type, brand };
     }
-    await Vehicle.update(value, { where: { id: req.params.vehicleId } });
-    res.status(201).json(value);
+    //=====//
+    const result = await Vehicle.update(value, {
+      where: { id: req.params.vehicleId },
+    });
+    //=====//
+    const allVehicle = await Vehicle.findAll({
+      where: { userId: req.user.id, deletedAt: null },
+    });
+    res.status(201).json(allVehicle);
   } catch (err) {
     next(err);
   } finally {
