@@ -157,9 +157,9 @@ exports.getSlotByParkId = async (req, res, next) => {
       start = now.toISOString().slice(0, 16),
       end = new Date(now.getTime() + 60000 * 60).toISOString().slice(0, 16),
     } = req.query;
-    if (start >= end) {
-      errorFn("End time must greater than start time", 400);
-    }
+    // if (start >= end) {
+    //   errorFn("End time must greater than start time", 400);
+    // }
     const st = new Date(start);
     const ed = new Date(end);
     // const st = new Date(start).getTime();

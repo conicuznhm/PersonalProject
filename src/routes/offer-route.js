@@ -3,6 +3,7 @@ const parkController = require("../controllers/park-controller");
 const floorController = require("../controllers/floor-controller");
 const slotController = require("../controllers/slot-controller");
 const upload = require("../middlewares/upload");
+const offerMiddleware = require("../middlewares/offer");
 
 const router = express.Router();
 //To crud park floor slot
