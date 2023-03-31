@@ -150,13 +150,13 @@ exports.getSlot = async (req, res, next) => {
 //use
 exports.getSlotByParkId = async (req, res, next) => {
   try {
-    // const { start, end } = req.query;
+    const { start, end } = req.query;
     const { parkId } = req.params;
-    const now = new Date();
-    const {
-      start = now.toISOString().slice(0, 16),
-      end = new Date(now.getTime() + 60000 * 60).toISOString().slice(0, 16),
-    } = req.query;
+    // const now = new Date();
+    // const {
+    //   start = now.toISOString().slice(0, 16),
+    //   end = new Date(now.getTime() + 60000 * 60).toISOString().slice(0, 16),
+    // } = req.query;
     // if (start >= end) {
     //   errorFn("End time must greater than start time", 400);
     // }
@@ -166,7 +166,7 @@ exports.getSlotByParkId = async (req, res, next) => {
     // const ed = new Date(end).getTime();
     const duration = (ed - st) / 1000 / 60 / 60;
     console.log(duration);
-    if (duration < 1) {
+    if (duration > 0 && duration < 1) {
       errorFn("The reserve duration time should greater than 1 hour", 400);
     }
     //find red slot

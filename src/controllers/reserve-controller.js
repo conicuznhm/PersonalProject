@@ -67,18 +67,39 @@ exports.createReservation = async (req, res, next) => {
       reserveCost,
     };
 
-    // const result = await Slot.update(
-    //   {
-    //     // isAvailable: false,
-    //     timeStart: selectStart,
-    //     timeEnd: selectEnd,
-    //   },
-    //   { where: { id: slotId } },
+    const result = await Reservation.create(value);
+    const reservation = await Reservation.findOne({
+      where: { id: result?.id },
+      include: [{ model: Vehicle }, { model: Park }, { model: Slot }],
+    });
+
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    };
+
+    // const newReservation = reservation.map((el) => {
+    //   const start = new Date(el.timeStart).toLocaleDateString("en-US", options);
+    //   const end = new Date(el.timeEnd).toLocaleDateString("en-US", options);
+    //   el.timeStart = start;
+    //   el.timeEnd = end;
+    //   return el;
+    // });
+
+    // const newStartFormat = new Date(reservation.timeStart).toLocaleDateString(
+    //   "en-US",
+    //   options,
     // );
-    // if (!result) {
-    //   errorFn("Can not reserve the park lot");
-    // }
-    const reservation = await Reservation.create(value);
+    // const newEndFormat = new Date(reservation.timeEnd).toLocaleDateString(
+    //   "en-US",
+    //   options,
+    // );
+    // const newReservation = { ...reservation };
+    // newReservation.timeStart = newStartFormat;
+    // newReservation.timeEnd = newEndFormat;
 
     res.status(201).json(reservation);
   } catch (err) {
