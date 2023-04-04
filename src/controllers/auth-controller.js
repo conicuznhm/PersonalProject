@@ -62,11 +62,11 @@ exports.login = async (req, res, next) => {
         profileImage: user.profileImage,
         createdAt: user.createdAt,
         updateAt: user.updateAt,
+        // isRemember: value.isRemember,
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: process.env.JWT_EXPIRES_IN },
     );
-    // console.log(accessToken)
     res.status(200).json({ accessToken });
   } catch (err) {
     next(err);
@@ -74,7 +74,7 @@ exports.login = async (req, res, next) => {
 };
 
 exports.getUser = async (req, res, next) => {
-  const user = await User.findOne({ where: { id: req.user.id } });
+  // const user = await User.findOne({ where: { id: req.user.id } });
   res.status(200).json({ user: req.user });
 };
 
